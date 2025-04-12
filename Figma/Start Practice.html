@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Interview Practice</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#4361ee',secondary:'#3f37c9'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+body {
+  font-family: 'Inter', sans-serif;
+}
+.wave {
+  animation: wave 1.5s infinite ease-in-out;
+}
+@keyframes wave {
+  0%, 100% { transform: scaleY(0.5); }
+  50% { transform: scaleY(1); }
+}
+.pulse {
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(67, 97, 238, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(67, 97, 238, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(67, 97, 238, 0); }
+}
+.speaking-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+.speaking-indicator span {
+  width: 3px;
+  height: 10px;
+  background-color: #4361ee;
+  border-radius: 3px;
+  animation: speaking 1s infinite ease-in-out;
+}
+.speaking-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+  height: 13px;
+}
+.speaking-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+  height: 16px;
+}
+.speaking-indicator span:nth-child(4) {
+  animation-delay: 0.6s;
+  height: 13px;
+}
+.speaking-indicator span:nth-child(5) {
+  animation-delay: 0.8s;
+  height: 10px;
+}
+@keyframes speaking {
+  0%, 100% { transform: scaleY(0.5); }
+  50% { transform: scaleY(1); }
+}
+</style>
+</head>
+<body class="bg-gray-50">
+<!-- Nav Bar -->
+<nav class="fixed top-0 w-full bg-white shadow-sm z-50 px-4 py-3 flex items-center justify-between">
+  <a href="index.html" data-readdy="true" class="flex items-center cursor-pointer">
+    <i class="ri-arrow-left-line text-gray-700 ri-lg"></i>
+  </a>
+  <h1 class="text-base font-medium text-gray-800">AI Interview Practice</h1>
+  <button class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 cursor-pointer">
+    <i class="ri-settings-3-line text-gray-600"></i>
+  </button>
+</nav>
+
+<!-- Main Content -->
+<main class="pt-16 pb-20">
+  <!-- Interview Setup Section -->
+  <section class="px-4 pt-3 pb-4 bg-white shadow-sm">
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-gray-700 mb-1">Select Job Role</label>
+      <div class="relative">
+        <select id="job-role" class="w-full bg-gray-50 border border-gray-200 rounded text-sm py-2.5 px-3 appearance-none cursor-pointer">
+          <option value="product-manager">Product Manager</option>
+          <option value="ux-designer">UX Designer</option>
+          <option value="software-engineer">Software Engineer</option>
+          <option value="data-scientist">Data Scientist</option>
+          <option value="marketing-manager">Marketing Manager</option>
+        </select>
+        <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+          <i class="ri-arrow-down-s-line text-gray-500"></i>
+        </div>
+      </div>
+    </div>
+    
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-gray-700 mb-2">Interview Type</label>
+      <div class="bg-gray-100 p-1 rounded-full flex">
+        <button id="behavioral-btn" class="flex-1 py-2 text-center rounded-full text-sm font-medium bg-white text-gray-800 shadow-sm cursor-pointer">Behavioral</button>
+        <button id="technical-btn" class="flex-1 py-2 text-center rounded-full text-sm font-medium text-gray-600 cursor-pointer">Technical</button>
+      </div>
+    </div>
+    
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-2">Difficulty Level</label>
+      <div class="flex space-x-2">
+        <button id="beginner-btn" class="flex-1 py-2 px-3 text-center rounded-button text-sm font-medium bg-primary bg-opacity-10 text-primary border border-primary border-opacity-20 cursor-pointer">Beginner</button>
+        <button id="intermediate-btn" class="flex-1 py-2 px-3 text-center rounded-button text-sm font-medium bg-gray-100 text-gray-600 cursor-pointer">Intermediate</button>
+        <button id="advanced-btn" class="flex-1 py-2 px-3 text-center rounded-button text-sm font-medium bg-gray-100 text-gray-600 cursor-pointer">Advanced</button>
+      </div>
+    </div>
+  </section>
+  
+  <!-- AI Interviewer Interface -->
+  <section class="px-4 pt-6">
+    <div class="flex flex-col items-center">
+      <div class="relative">
+        <div class="w-24 h-24 rounded-full bg-primary bg-opacity-10 flex items-center justify-center pulse">
+          <img src="https://readdy.ai/api/search-image?query=professional%2520AI%2520assistant%2520avatar%252C%2520minimalist%2520design%252C%2520blue%2520color%2520scheme%252C%2520friendly%2520appearance%252C%2520digital%2520assistant%252C%2520clean%2520vector%2520style%252C%2520centered%2520composition%252C%2520isolated%2520on%2520transparent%2520background&width=80&height=80&seq=12349&orientation=squarish" alt="AI Interviewer" class="w-20 h-20 rounded-full object-cover">
+        </div>
+        <div class="absolute -bottom-1 right-0 bg-green-500 w-5 h-5 rounded-full border-2 border-white"></div>
+      </div>
+      <h3 class="text-base font-medium text-gray-800 mt-3">Sarah, AI Interviewer</h3>
+      <p class="text-xs text-gray-500">Product Manager Interview Specialist</p>
+      
+      <div class="speaking-indicator mt-2">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+    
+    <div class="mt-6 relative">
+      <div class="absolute top-3 right-3 flex items-center space-x-2">
+        <div class="bg-primary bg-opacity-10 text-primary text-xs font-medium px-2 py-1 rounded-full">
+          <span id="timer">00:00</span>
+        </div>
+        <div class="bg-gray-100 text-gray-600 text-xs font-medium px-2 py-1 rounded-full">
+          Q <span id="question-number">1</span>/<span id="total-questions">10</span>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-xl p-5 shadow-sm min-h-32">
+        <h4 class="text-sm font-medium text-gray-700 mb-2">Current Question:</h4>
+        <p id="current-question" class="text-gray-800">Tell me about a time when you had to make a difficult decision with limited information. How did you approach it, and what was the outcome?</p>
+      </div>
+    </div>
+  </section>
+  
+  <!-- User Response Area -->
+  <section class="px-4 pt-6">
+    <div class="bg-white rounded-xl p-4 shadow-sm">
+      <div class="relative mb-4 bg-gray-50 rounded-lg overflow-hidden">
+        <div id="video-preview" class="w-full h-48 bg-gray-200 rounded-lg flex items-center justify-center">
+          <img src="https://readdy.ai/api/search-image?query=professional%2520person%2520in%2520business%2520attire%2520during%2520video%2520interview%252C%2520front%2520facing%2520camera%2520view%252C%2520neutral%2520expression%252C%2520office%2520background%252C%2520high%2520quality%2520webcam%2520feed%252C%2520professional%2520lighting&width=327&height=180&seq=12350&orientation=landscape" alt="Video Preview" class="w-full h-full object-cover">
+        </div>
+        
+        <div class="absolute bottom-3 right-3 flex space-x-2">
+          <button id="mic-toggle" class="w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-md cursor-pointer">
+            <i class="ri-mic-line text-gray-700"></i>
+          </button>
+          <button id="camera-toggle" class="w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-md cursor-pointer">
+            <i class="ri-camera-line text-gray-700"></i>
+          </button>
+        </div>
+        
+        <div class="absolute top-3 left-3 bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full flex items-center">
+          <span class="w-2 h-2 bg-white rounded-full mr-1 animate-pulse"></span>
+          Recording
+        </div>
+      </div>
+      
+      <div class="flex justify-between items-center">
+        <div class="flex items-center space-x-1">
+          <div class="w-1 h-8 bg-primary rounded wave"></div>
+          <div class="w-1 h-10 bg-primary rounded wave" style="animation-delay: 0.2s"></div>
+          <div class="w-1 h-6 bg-primary rounded wave" style="animation-delay: 0.3s"></div>
+          <div class="w-1 h-12 bg-primary rounded wave" style="animation-delay: 0.4s"></div>
+          <div class="w-1 h-8 bg-primary rounded wave" style="animation-delay: 0.5s"></div>
+          <div class="w-1 h-10 bg-primary rounded wave" style="animation-delay: 0.6s"></div>
+          <div class="w-1 h-7 bg-primary rounded wave" style="animation-delay: 0.7s"></div>
+          <div class="w-1 h-9 bg-primary rounded wave" style="animation-delay: 0.8s"></div>
+        </div>
+        
+        <div class="flex space-x-2">
+          <button id="pause-btn" class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-button text-sm font-medium cursor-pointer">
+            <i class="ri-pause-line mr-1"></i> Pause
+          </button>
+          <button id="end-btn" class="px-3 py-1.5 bg-red-500 text-white rounded-button text-sm font-medium cursor-pointer">
+            <i class="ri-stop-line mr-1"></i> End
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Action Buttons -->
+  <section class="px-4 pt-5">
+    <div class="grid grid-cols-2 gap-3">
+      <button id="skip-btn" class="py-2.5 bg-white border border-gray-200 text-gray-700 rounded-button text-sm font-medium cursor-pointer">
+        <i class="ri-skip-forward-line mr-1"></i> Skip Question
+      </button>
+      <button id="repeat-btn" class="py-2.5 bg-white border border-gray-200 text-gray-700 rounded-button text-sm font-medium cursor-pointer">
+        <i class="ri-repeat-line mr-1"></i> Repeat Question
+      </button>
+    </div>
+  </section>
+  
+  <!-- Feedback Panel -->
+  <section class="px-4 pt-5">
+    <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+      <div id="feedback-header" class="p-4 flex justify-between items-center cursor-pointer">
+        <div class="flex items-center">
+          <div class="w-8 h-8 flex items-center justify-center bg-primary bg-opacity-10 rounded-lg mr-3">
+            <i class="ri-feedback-line text-primary"></i>
+          </div>
+          <div>
+            <h4 class="text-sm font-medium text-gray-800">Real-time Feedback</h4>
+            <p class="text-xs text-gray-500">Tap to view detailed feedback</p>
+          </div>
+        </div>
+        <i id="feedback-toggle" class="ri-arrow-down-s-line text-gray-600"></i>
+      </div>
+      
+      <div id="feedback-content" class="px-4 pb-4 hidden">
+        <div class="space-y-4">
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <span class="text-xs font-medium text-gray-700">Speech Clarity</span>
+              <span class="text-xs text-gray-500">Good</span>
+            </div>
+            <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div class="h-full bg-green-500 rounded-full" style="width: 75%"></div>
+            </div>
+          </div>
+          
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <span class="text-xs font-medium text-gray-700">Eye Contact</span>
+              <span class="text-xs text-gray-500">Needs Improvement</span>
+            </div>
+            <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div class="h-full bg-yellow-500 rounded-full" style="width: 45%"></div>
+            </div>
+          </div>
+          
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <span class="text-xs font-medium text-gray-700">Body Language</span>
+              <span class="text-xs text-gray-500">Good</span>
+            </div>
+            <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div class="h-full bg-green-500 rounded-full" style="width: 70%"></div>
+            </div>
+          </div>
+          
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <span class="text-xs font-medium text-gray-700">Answer Completeness</span>
+              <span class="text-xs text-gray-500">Excellent</span>
+            </div>
+            <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div class="h-full bg-primary rounded-full" style="width: 90%"></div>
+            </div>
+          </div>
+          
+          <div class="pt-2">
+            <h5 class="text-xs font-medium text-gray-700 mb-1">Quick Tips:</h5>
+            <ul class="text-xs text-gray-600 space-y-1 pl-4 list-disc">
+              <li>Try to maintain more consistent eye contact with the camera</li>
+              <li>Consider using more specific examples in your responses</li>
+              <li>Your pacing is good, keep maintaining a steady speaking rate</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Interview Progress -->
+  <section class="px-4 pt-5 pb-8">
+    <h3 class="text-sm font-medium text-gray-700 mb-3">Interview Progress</h3>
+    <div class="grid grid-cols-5 gap-2">
+      <div class="h-1.5 bg-primary rounded-full"></div>
+      <div class="h-1.5 bg-gray-300 rounded-full"></div>
+      <div class="h-1.5 bg-gray-300 rounded-full"></div>
+      <div class="h-1.5 bg-gray-300 rounded-full"></div>
+      <div class="h-1.5 bg-gray-300 rounded-full"></div>
+    </div>
+    <div class="flex justify-between mt-1">
+      <span class="text-xs text-gray-500">Question 1/5</span>
+      <span class="text-xs text-gray-500">20% Complete</span>
+    </div>
+  </section>
+</main>
+
+<!-- Tab Bar -->
+<div class="fixed bottom-0 w-full bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.05)] px-2 py-2">
+  <div class="grid grid-cols-4">
+    <a href="index.html" data-readdy="true" class="flex flex-col items-center justify-center cursor-pointer">
+      <div class="w-6 h-6 flex items-center justify-center">
+        <i class="ri-home-5-line text-gray-500"></i>
+      </div>
+      <span class="text-xs mt-1 text-gray-500">Home</span>
+    </a>
+    <a href="#" class="flex flex-col items-center justify-center cursor-pointer">
+      <div class="w-6 h-6 flex items-center justify-center">
+        <i class="ri-history-line text-gray-500"></i>
+      </div>
+      <span class="text-xs mt-1 text-gray-500">History</span>
+    </a>
+    <a href="#" class="flex flex-col items-center justify-center cursor-pointer">
+      <div class="w-6 h-6 flex items-center justify-center">
+        <i class="ri-questionnaire-line text-primary"></i>
+      </div>
+      <span class="text-xs mt-1 text-primary">Practice</span>
+    </a>
+    <a href="#" class="flex flex-col items-center justify-center cursor-pointer">
+      <div class="w-6 h-6 flex items-center justify-center">
+        <i class="ri-user-3-line text-gray-500"></i>
+      </div>
+      <span class="text-xs mt-1 text-gray-500">Profile</span>
+    </a>
+  </div>
+</div>
+
+<!-- Modal for interview completion -->
+<div id="completion-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+  <div class="bg-white rounded-xl w-11/12 max-w-sm p-5">
+    <div class="flex justify-center mb-4">
+      <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+        <i class="ri-check-line text-green-500 ri-2x"></i>
+      </div>
+    </div>
+    <h3 class="text-lg font-semibold text-center text-gray-800 mb-2">Interview Completed!</h3>
+    <p class="text-sm text-gray-600 text-center mb-4">Your practice interview has been successfully recorded and analyzed.</p>
+    
+    <div class="bg-gray-50 rounded-lg p-3 mb-4">
+      <div class="flex justify-between mb-2">
+        <span class="text-sm text-gray-700">Overall Score</span>
+        <span class="text-sm font-medium text-primary">82/100</span>
+      </div>
+      <div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+        <div class="h-full bg-primary rounded-full" style="width: 82%"></div>
+      </div>
+    </div>
+    
+    <div class="space-y-3 mb-5">
+      <button class="w-full py-2.5 bg-primary text-white rounded-button text-sm font-medium cursor-pointer">
+        View Detailed Feedback
+      </button>
+      <button class="w-full py-2.5 bg-white border border-gray-200 text-gray-700 rounded-button text-sm font-medium cursor-pointer">
+        Try Another Interview
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Interview type toggle
+  const behavioralBtn = document.getElementById('behavioral-btn');
+  const technicalBtn = document.getElementById('technical-btn');
+  
+  behavioralBtn.addEventListener('click', function() {
+    behavioralBtn.classList.add('bg-white', 'text-gray-800', 'shadow-sm');
+    behavioralBtn.classList.remove('text-gray-600');
+    technicalBtn.classList.remove('bg-white', 'text-gray-800', 'shadow-sm');
+    technicalBtn.classList.add('text-gray-600');
+  });
+  
+  technicalBtn.addEventListener('click', function() {
+    technicalBtn.classList.add('bg-white', 'text-gray-800', 'shadow-sm');
+    technicalBtn.classList.remove('text-gray-600');
+    behavioralBtn.classList.remove('bg-white', 'text-gray-800', 'shadow-sm');
+    behavioralBtn.classList.add('text-gray-600');
+  });
+  
+  // Difficulty level toggle
+  const beginnerBtn = document.getElementById('beginner-btn');
+  const intermediateBtn = document.getElementById('intermediate-btn');
+  const advancedBtn = document.getElementById('advanced-btn');
+  
+  beginnerBtn.addEventListener('click', function() {
+    beginnerBtn.classList.add('bg-primary', 'bg-opacity-10', 'text-primary', 'border', 'border-primary', 'border-opacity-20');
+    beginnerBtn.classList.remove('bg-gray-100', 'text-gray-600');
+    intermediateBtn.classList.remove('bg-primary', 'bg-opacity-10', 'text-primary', 'border', 'border-primary', 'border-opacity-20');
+    intermediateBtn.classList.add('bg-gray-100', 'text-gray-600');
+    advancedBtn.classList.remove('bg-primary', 'bg-opacity-10', 'text-primary', 'border', 'border-primary', 'border-opacity-20');
+    advancedBtn.classList.add('bg-gray-100', 'text-gray-600');
+  });
+  
+  intermediateBtn.addEventListener('click', function() {
+    intermediateBtn.classList.add('bg-primary', 'bg-opacity-10', 'text-primary', 'border', 'border-primary', 'border-opacity-20');
+    intermediateBtn.classList.remove('bg-gray-100', 'text-gray-600');
+    beginnerBtn.classList.remove('bg-primary', 'bg-opacity-10', 'text-primary', 'border', 'border-primary', 'border-opacity-20');
+    beginnerBtn.classList.add('bg-gray-100', 'text-gray-600');
+    advancedBtn.classList.remove('bg-primary', 'bg-opacity-10', 'text-primary', 'border', 'border-primary', 'border-opacity-20');
+    advancedBtn.classList.add('bg-gray-100', 'text-gray-600');
+  });
+  
+  advancedBtn.addEventListener('click', function() {
+    advancedBtn.classList.add('bg-primary', 'bg-opacity-10', 'text-primary', 'border', 'border-primary', 'border-opacity-20');
+    advancedBtn.classList.remove('bg-gray-100', 'text-gray-600');
+    beginnerBtn.classList.remove('bg-primary', 'bg-opacity-10', 'text-primary', 'border', 'border-primary', 'border-opacity-20');
+    beginnerBtn.classList.add('bg-gray-100', 'text-gray-600');
+    intermediateBtn.classList.remove('bg-primary', 'bg-opacity-10', 'text-primary', 'border', 'border-primary', 'border-opacity-20');
+    intermediateBtn.classList.add('bg-gray-100', 'text-gray-600');
+  });
+  
+  // Feedback panel toggle
+  const feedbackHeader = document.getElementById('feedback-header');
+  const feedbackContent = document.getElementById('feedback-content');
+  const feedbackToggle = document.getElementById('feedback-toggle');
+  
+  feedbackHeader.addEventListener('click', function() {
+    feedbackContent.classList.toggle('hidden');
+    if (feedbackContent.classList.contains('hidden')) {
+      feedbackToggle.classList.remove('ri-arrow-up-s-line');
+      feedbackToggle.classList.add('ri-arrow-down-s-line');
+    } else {
+      feedbackToggle.classList.remove('ri-arrow-down-s-line');
+      feedbackToggle.classList.add('ri-arrow-up-s-line');
+    }
+  });
+  
+  // Timer functionality
+  let seconds = 0;
+  let minutes = 0;
+  const timerElement = document.getElementById('timer');
+  
+  const timer = setInterval(function() {
+    seconds++;
+    if (seconds === 60) {
+      seconds = 0;
+      minutes++;
+    }
+    
+    const displayMinutes = minutes < 10 ? '0' + minutes : minutes;
+    const displaySeconds = seconds < 10 ? '0' + seconds : seconds;
+    
+    timerElement.textContent = displayMinutes + ':' + displaySeconds;
+  }, 1000);
+  
+  // Mic and camera toggle
+  const micToggle = document.getElementById('mic-toggle');
+  const cameraToggle = document.getElementById('camera-toggle');
+  
+  micToggle.addEventListener('click', function() {
+    const micIcon = micToggle.querySelector('i');
+    if (micIcon.classList.contains('ri-mic-line')) {
+      micIcon.classList.remove('ri-mic-line');
+      micIcon.classList.add('ri-mic-off-line');
+      micToggle.classList.add('bg-red-100');
+      micIcon.classList.add('text-red-500');
+    } else {
+      micIcon.classList.remove('ri-mic-off-line');
+      micIcon.classList.add('ri-mic-line');
+      micToggle.classList.remove('bg-red-100');
+      micIcon.classList.remove('text-red-500');
+    }
+  });
+  
+  cameraToggle.addEventListener('click', function() {
+    const cameraIcon = cameraToggle.querySelector('i');
+    if (cameraIcon.classList.contains('ri-camera-line')) {
+      cameraIcon.classList.remove('ri-camera-line');
+      cameraIcon.classList.add('ri-camera-off-line');
+      cameraToggle.classList.add('bg-red-100');
+      cameraIcon.classList.add('text-red-500');
+    } else {
+      cameraIcon.classList.remove('ri-camera-off-line');
+      cameraIcon.classList.add('ri-camera-line');
+      cameraToggle.classList.remove('bg-red-100');
+      cameraIcon.classList.remove('text-red-500');
+    }
+  });
+  
+  // End interview button
+  const endBtn = document.getElementById('end-btn');
+  const completionModal = document.getElementById('completion-modal');
+  
+  endBtn.addEventListener('click', function() {
+    completionModal.classList.remove('hidden');
+    clearInterval(timer);
+  });
+  
+  // Close modal when clicking outside
+  completionModal.addEventListener('click', function(e) {
+    if (e.target === completionModal) {
+      completionModal.classList.add('hidden');
+    }
+  });
+  
+  // Questions functionality
+  const questions = [
+    "Tell me about a time when you had to make a difficult decision with limited information. How did you approach it, and what was the outcome?",
+    "Describe a situation where you had to work with a challenging team member. How did you handle it?",
+    "Give an example of a time when you failed to meet a deadline. What happened and what did you learn?",
+    "Tell me about a time when you had to adapt to a significant change at work.",
+    "Describe a project where you demonstrated leadership skills."
+  ];
+  
+  let currentQuestionIndex = 0;
+  const currentQuestionElement = document.getElementById('current-question');
+  const questionNumberElement = document.getElementById('question-number');
+  
+  // Skip question button
+  const skipBtn = document.getElementById('skip-btn');
+  skipBtn.addEventListener('click', function() {
+    if (currentQuestionIndex < questions.length - 1) {
+      currentQuestionIndex++;
+      currentQuestionElement.textContent = questions[currentQuestionIndex];
+      questionNumberElement.textContent = currentQuestionIndex + 1;
+      
+      // Update progress bar
+      const progressBars = document.querySelectorAll('section:last-child .grid > div');
+      progressBars.forEach((bar, index) => {
+        if (index <= currentQuestionIndex) {
+          bar.classList.remove('bg-gray-300');
+          bar.classList.add('bg-primary');
+        }
+      });
+      
+      // Update progress text
+      const progressText = document.querySelector('section:last-child .flex > span:last-child');
+      progressText.textContent = `${(currentQuestionIndex + 1) * 20}% Complete`;
+    }
+  });
+  
+  // Repeat question button
+  const repeatBtn = document.getElementById('repeat-btn');
+  repeatBtn.addEventListener('click', function() {
+    // Add a visual indication that the question is being repeated
+    currentQuestionElement.classList.add('text-primary');
+    setTimeout(() => {
+      currentQuestionElement.classList.remove('text-primary');
+    }, 500);
+  });
+  
+  // Pause button
+  const pauseBtn = document.getElementById('pause-btn');
+  let isPaused = false;
+  
+  pauseBtn.addEventListener('click', function() {
+    isPaused = !isPaused;
+    const pauseIcon = pauseBtn.querySelector('i');
+    const pauseText = pauseBtn.textContent.trim().replace(pauseIcon.textContent, '').trim();
+    
+    if (isPaused) {
+      pauseIcon.classList.remove('ri-pause-line');
+      pauseIcon.classList.add('ri-play-line');
+      pauseBtn.innerHTML = `<i class="ri-play-line mr-1"></i> Resume`;
+      pauseBtn.classList.add('bg-primary', 'text-white');
+      pauseBtn.classList.remove('bg-gray-100', 'text-gray-700');
+    } else {
+      pauseIcon.classList.remove('ri-play-line');
+      pauseIcon.classList.add('ri-pause-line');
+      pauseBtn.innerHTML = `<i class="ri-pause-line mr-1"></i> Pause`;
+      pauseBtn.classList.remove('bg-primary', 'text-white');
+      pauseBtn.classList.add('bg-gray-100', 'text-gray-700');
+    }
+  });
+});
+</script>
+</body>
+</html>
